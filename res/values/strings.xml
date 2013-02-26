@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<!-- This file contains resource definitions for displayed strings, allowing
+     them to be changed based on the locale and options. -->
+
+<resources>
+    <!-- Simple strings. -->
+    <string name="gardeners_delight_app">Gardeners Delight</string>
+    <string name="back">Back</string>
+    <string name="clear">Clear</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="first_screen">First Screen</string>
+    <string name="what_do_you_want_to_do">What do you want to do?</string>
+    <string name="home_page">Home Page</string>
+    <string name="find">Find</string>
+    <string name="map">Map</string>
+    <string name="clear_map">Clear Map</string>
+    <string name="reset_map">Reset Map</string>
+    <string name="default_info_window">Default Info Window</string>
+    <string name="custom_info_window">Custom Info Window</string>
+    <string name="custom_info_contents">Custom Info Contents</string>
+    <string name="drag_melbourne">Drag Melbourne</string>
+    <string name="map_not_ready">Map not ready</string>
+    
+    <!-- This is a complex string containing style runs. -->
+    <string name="main_label">Hello <u>th<ignore>e</ignore>re</u>, <i>you</i> <b>Activity</b>!</string> <string name="privacy">About your privacy</string> 
+    
+</resources>
+

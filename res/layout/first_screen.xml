@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <!-- First view is a text editor.  We want it to use all available
+         horizontal space, and stretch to fill whatever vertical space
+         is available to it.  Note the use of the "id" attribute, which
+         allows us to find this object from the Java code. -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/sign_in"
+            android:layout_width="138dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.42"
+            android:text="@string/sign_in" />
+
+        <Button
+            android:id="@+id/sign_up"
+            android:layout_width="138dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.38"
+            android:text="@string/sign_up" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/privacy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.42"
+            android:text="@string/privacy" />
+    </LinearLayout>
+    
+</LinearLayout>
