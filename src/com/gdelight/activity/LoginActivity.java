@@ -17,12 +17,14 @@
 package com.gdelight.activity;
 
 import com.gdelight.R;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 
 /**
  * This class provides a basic demonstration of how to write an Android
@@ -31,7 +33,12 @@ import android.widget.Button;
  */
 public class LoginActivity extends Activity {
     
+	EditText username = null;
+	EditText password = null;
+	EditText password2 = null;
+	
     public LoginActivity() {
+    	
     }
 
     /** Called with the activity is first created. */
@@ -42,8 +49,11 @@ public class LoginActivity extends Activity {
         // Inflate our UI from its XML layout description.
         setContentView(R.layout.login);
 
-        ((Button) findViewById(R.id.loginButton)).setOnClickListener(mLoginListener);
-        
+        ((Button) findViewById(R.id.signupButton)).setOnClickListener(mLoginListener);
+        username = (EditText) findViewById(R.id.loginUsername);
+        password = (EditText) findViewById(R.id.loginPassword);
+        password2 = (EditText) findViewById(R.id.loginPassword2);
+
     }
 
     /**
@@ -56,9 +66,11 @@ public class LoginActivity extends Activity {
 
     OnClickListener mLoginListener = new OnClickListener() {
         public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.setClassName("com.gdelight", "com.gdelight.activity.HomePageActivity");
-            startActivity(intent);
+        	
+    		Intent intent = new Intent();
+    		intent.setClassName("com.gdelight", "com.gdelight.activity.HomePageActivity");
+    		startActivity(intent);
+        	
         }
     };
 

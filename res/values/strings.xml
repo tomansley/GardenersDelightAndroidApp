@@ -26,6 +26,7 @@
     <string name="sign_up">Sign Up</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="password2">Password Again</string>
     <string name="login">Login</string>
     <string name="first_screen">First Screen</string>
     <string name="what_do_you_want_to_do">What do you want to do?</string>
@@ -39,6 +40,7 @@
     <string name="custom_info_contents">Custom Info Contents</string>
     <string name="drag_melbourne">Drag Melbourne</string>
     <string name="map_not_ready">Map not ready</string>
+    <string name="signup">Signup</string>
     
     <!-- This is a complex string containing style runs. -->
     <string name="main_label">Hello <u>th<ignore>e</ignore>re</u>, <i>you</i> <b>Activity</b>!</string> <string name="privacy">About your privacy</string> 

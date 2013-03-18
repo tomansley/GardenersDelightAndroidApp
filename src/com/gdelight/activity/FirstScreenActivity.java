@@ -73,7 +73,9 @@ public class FirstScreenActivity extends Activity {
 
     OnClickListener mSignUpListener = new OnClickListener() {
         public void onClick(View v) {
-            mEditor.setText("");
+            Intent intent = new Intent();
+            intent.setClassName("com.gdelight", "com.gdelight.activity.SignupActivity");
+            startActivity(intent);
         }
     };
 }

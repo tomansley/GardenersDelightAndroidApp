@@ -24,7 +24,8 @@
 		<activity android:name="com.gdelight.activity.LoginActivity" android:label="@string/login"></activity>
 		<activity android:name="com.gdelight.activity.HomePageActivity" android:label="@string/home_page"></activity>
 		<activity android:name="com.gdelight.activity.MapActivity" android:label="@string/map"></activity>
-				
+		<activity android:name="com.gdelight.activity.SignupActivity" android:label="@string/map"></activity>
+						
     </application>
 
 </manifest>
