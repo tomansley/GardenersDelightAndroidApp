@@ -17,22 +17,21 @@
 package com.gdelight.activity;
 
 import com.gdelight.R;
+import com.nullwire.trace.ExceptionHandler;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 
 /**
  * This class provides a basic demonstration of how to write an Android
  * activity. Inside of its window, it places a single view: an EditText that
  * displays and edits some internal text.
  */
-public class FirstScreenActivity extends Activity {
-    
-    private EditText mEditor;
+public class FirstScreenActivity extends Activity implements OnClickListener {
     
     public FirstScreenActivity() {
     }
@@ -42,6 +41,9 @@ public class FirstScreenActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //send trace back to base to be able to track issues
+        ExceptionHandler.register(this, "http://www.tomansley.com/gdelight/trace.php"); 
+
         // Inflate our UI from its XML layout description.
         setContentView(R.layout.first_screen);
 
@@ -50,8 +52,8 @@ public class FirstScreenActivity extends Activity {
         //mEditor = (EditText) findViewById(R.id.editor);
 
         // Hook up button presses to the appropriate event handler.
-        ((Button) findViewById(R.id.sign_in)).setOnClickListener(mSignInListener);
-        ((Button) findViewById(R.id.sign_up)).setOnClickListener(mSignUpListener);
+        ((Button) findViewById(R.id.firstScreenSignInButton)).setOnClickListener(this);
+        ((Button) findViewById(R.id.firstScreenSignUpButton)).setOnClickListener(this);
         
     }
 
@@ -63,19 +65,23 @@ public class FirstScreenActivity extends Activity {
         super.onResume();
     }
 
-    OnClickListener mSignInListener = new OnClickListener() {
-        public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.setClassName("com.gdelight", "com.gdelight.activity.LoginActivity");
-            startActivity(intent);
-        }
-    };
-
-    OnClickListener mSignUpListener = new OnClickListener() {
-        public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.setClassName("com.gdelight", "com.gdelight.activity.SignupActivity");
-            startActivity(intent);
-        }
-    };
+	@Override
+	public void onClick(View v) {
+		switch(v.getId()) {
+			case R.id.firstScreenSignInButton: {
+				Intent intent = new Intent();
+				intent.setClassName("com.gdelight", "com.gdelight.activity.LoginActivity");
+				startActivity(intent);
+				break;
+			}
+			case R.id.firstScreenSignUpButton: {
+				Intent intent = new Intent();
+				intent.setClassName("com.gdelight", "com.gdelight.activity.SignupActivity");
+				startActivity(intent);
+				break;
+			}
+			default:
+				throw new RuntimeException("Unknow button ID");
+		}
+	}
 }

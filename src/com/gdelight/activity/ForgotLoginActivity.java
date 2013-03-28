@@ -17,12 +17,6 @@
 package com.gdelight.activity;
 
 import com.gdelight.R;
-import com.gdelight.domain.base.BaseResponseBean.STATUS_TYPE;
-import com.gdelight.domain.request.LoginRequestBean;
-import com.gdelight.domain.response.LoginResponseBean;
-import com.gdelight.request.RequestHelper;
-import com.gdelight.utils.constants.Constants;
-import com.gdelight.utils.string.StringHelper;
 import com.nullwire.trace.ExceptionHandler;
 
 import android.app.Activity;
@@ -39,13 +33,13 @@ import android.widget.Toast;
  * activity. Inside of its window, it places a single view: an EditText that
  * displays and edits some internal text.
  */
-public class LoginActivity extends Activity implements OnClickListener {
+public class ForgotLoginActivity extends Activity implements OnClickListener {
     
 	EditText username = null;
 	EditText password = null;
-	Activity activity = this;
+	EditText password2 = null;
 	
-    public LoginActivity() {
+    public ForgotLoginActivity() {
     	
     }
 
@@ -63,6 +57,8 @@ public class LoginActivity extends Activity implements OnClickListener {
         ((Button) findViewById(R.id.loginLoginButton)).setOnClickListener(this);
         username = (EditText) findViewById(R.id.loginUsername);
         password = (EditText) findViewById(R.id.loginPassword);
+        password2 = (EditText) findViewById(R.id.loginPassword2);
+
     }
 
     /**
@@ -73,43 +69,26 @@ public class LoginActivity extends Activity implements OnClickListener {
         super.onResume();
     }
 
+    OnClickListener mLoginListener = new OnClickListener() {
+        public void onClick(View v) {
+        	
+        	
+        }
+    };
+
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()) {
-		case R.id.loginLoginButton: {
-			if (password.equals("") || username.equals("")) {
-				Toast.makeText(getApplicationContext(), R.string.login_error_please_enter_values, Toast.LENGTH_LONG).show();
-			} else {
-
-				//get the appropriate request bean and populate.
-				LoginRequestBean requestBean = new LoginRequestBean();
-				requestBean.setUserId(username.getText().toString());
-				requestBean.setToken(StringHelper.encryptPassword(password.getText().toString()));
-
-				LoginResponseBean responseBean = (LoginResponseBean) RequestHelper.makeRequest(activity, requestBean);
-				
-				//if error
-				if (responseBean.getStatus().equals(STATUS_TYPE.FAILED)) {
-					Toast.makeText(getApplicationContext(), R.string.login_error_invalid_credentials, Toast.LENGTH_LONG).show();
-				
-				//else go to home page for new user.
-				} else {
-
-					Intent intent = new Intent();
-					intent.setClassName("com.gdelight", "com.gdelight.activity.HomePageActivity");
-
-					Bundle b = new Bundle();
-					b.putSerializable(Constants.USER_BEAN, responseBean.getUser());
-
-					intent.putExtras(b);
-					startActivity(intent);
-				}
-			}
-        	
+		case R.id.forgotLoginSigninButton: {
+			Toast.makeText(getApplicationContext(), R.string.forgot_login_signin_button, Toast.LENGTH_LONG).show();
+			break;
+		}
+		case R.id.forgotLoginSendPasswordButton: {
+			Toast.makeText(getApplicationContext(), R.string.forgot_login_send_password_button, Toast.LENGTH_LONG).show();
 			break;
 		}
 		default:
-			throw new RuntimeException("Unknown button ID");
+			throw new RuntimeException("Unknow button ID");
 	}
 	}
 

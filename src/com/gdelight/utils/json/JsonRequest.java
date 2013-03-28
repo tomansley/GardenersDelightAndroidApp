@@ -3,6 +3,7 @@ package com.gdelight.utils.json;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Scanner;
 
@@ -22,11 +23,17 @@ public class JsonRequest extends AsyncTask<String, Integer, String> {
 		this.activity = activity;
 	}
 	
+	protected void onPreExecute()
+    {
+        progressDialog = ProgressDialog.show(activity, "", "Loading...");
+        progressDialog.show();
+    }
+
 	protected String doInBackground(String... json) {
 
 		try {
 
-			URL url = new URL("http://gdelight.elasticbeanstalk.com/services/testService/");
+			URL url = new URL("http://gdelight.elasticbeanstalk.com/services/postService/");
 
 			//you need to encode ONLY the values of the parameters
 			String param="json=" + URLEncoder.encode(json[0],"UTF-8");
@@ -57,7 +64,7 @@ public class JsonRequest extends AsyncTask<String, Integer, String> {
 				response = response + inStream.nextLine();
 			}
 
-			Log.d("", "RESPONSE - " + response);
+			Log.d("", "RESPONSE BEFORE DECODING - " + response);
 
 			//catch some error
 		} catch(Exception ex){
@@ -65,24 +72,23 @@ public class JsonRequest extends AsyncTask<String, Integer, String> {
 			response = "Request Error";
 		}
 
-		return response;
-	}
-	
-	public String getResponse() {
+		response = URLDecoder.decode(response);
+
+		Log.d("", "RESPONSE AFTER DECODING - " + response);
+		
 		return response;
 	}
 
 	protected void onProgressUpdate(Integer... progress) {
-		//setProgressPercent(progress[0]);
+		if (progress.length > 0) {
+			progressDialog.setProgress(progress[0]);
+		}
 	}
 	
-	protected void onPreExecute()
-    {
-        progressDialog = ProgressDialog.show(activity, "", "Loading...");
-    }
-
 	protected void onPostExecute(String result) {
-		progressDialog.dismiss();
+		if (progressDialog.isShowing()) {
+			progressDialog.dismiss();
+        }
 	}
 
 }

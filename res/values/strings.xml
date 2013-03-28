@@ -18,32 +18,63 @@
      them to be changed based on the locale and options. -->
 
 <resources>
-    <!-- Simple strings. -->
+
     <string name="gardeners_delight_app">Gardeners Delight</string>
-    <string name="back">Back</string>
-    <string name="clear">Clear</string>
-    <string name="sign_in">Sign In</string>
-    <string name="sign_up">Sign Up</string>
-    <string name="username">Username</string>
-    <string name="password">Password</string>
-    <string name="password2">Password Again</string>
-    <string name="login">Login</string>
-    <string name="first_screen">First Screen</string>
-    <string name="what_do_you_want_to_do">What do you want to do?</string>
+    
+    <string name="task_manager_task_starting">The task is starting...</string>
+    <string name="task_manager_task_working">The task is working...</string>
+    
+    <string name="first_screen_sign_in">Sign In</string>
+    <string name="first_screen_sign_up">Sign Up</string>
+	<string name="first_screen_privacy">About your privacy</string>
+	
+    <string name="signup_password2">Password Again</string>
+    <string name="signup_username">Username</string>
+    <string name="signup_password">Password</string>
+    <string name="signup_login">Login</string>
+	<string name="signup_signup">Signup</string>
+	<string name="signup_resend_password">Send Password</string>
+	<string name="signup_username_exists">The username already exists</string>
+    <string name="signup_error">Signup Error</string>
+	
+    <string name="login_login">Login</string>
+    <string name="login_error_please_enter_values">Please enter username and password</string>
+    <string name="login_error_invalid_credentials">Invalid login.  Please try again.</string>
+    <string name="login_username">Username</string>
+    <string name="login_password">Password</string>
+
+    <string name="forgot_login_signin_button">FORGOT LOGIN SIGNIN BUTTON PRESSED</string>
+    <string name="forgot_login_send_password_button">FORGOT LOGIN SEND PASSWORD BUTTON PRESSED</string>
+    <string name="forgot_login_sign_in">Sign In</string>
+	<string name="forgot_login_resend_password">Send Password</string>
+	<string name="forgot_login_username_exists">The username already exists</string>
+	
+    <string name="home_do_you_have">Do you have something available?</string>
+    <string name="home_do_you_want">or do you want something?</string>
     <string name="home_page">Home Page</string>
-    <string name="find">Find</string>
-    <string name="map">Map</string>
-    <string name="clear_map">Clear Map</string>
-    <string name="reset_map">Reset Map</string>
-    <string name="default_info_window">Default Info Window</string>
-    <string name="custom_info_window">Custom Info Window</string>
-    <string name="custom_info_contents">Custom Info Contents</string>
-    <string name="drag_melbourne">Drag Melbourne</string>
-    <string name="map_not_ready">Map not ready</string>
-    <string name="signup">Signup</string>
+    <string name="have">Have</string>
     
-    <!-- This is a complex string containing style runs. -->
-    <string name="main_label">Hello <u>th<ignore>e</ignore>re</u>, <i>you</i> <b>Activity</b>!</string> <string name="privacy">About your privacy</string> 
+    <string name="want">Want</string>
+    <string name="want_home">Want Home</string>
+    <string name="want_header">What are you looking for?</string>
+    <string name="want_or">Or browse by category</string>
+    <string name="want_just_start_typing">Just start typing</string>
+    <string name="want_driving_distance">Driving distance</string>
+    <string name="want_want_list">Want List</string>
+    <string name="want_add_to_list">Add to list</string>
+    <string name="want_search">Search</string>
+    <string name="want_already_in_shopping_list">Item already in shopping list</string>
+    <string name="want_search_button">THIS IS WHERE WE WOULD SEARCH</string>
+    <string name="want_find_no_results">Nothing found</string>
+    <string name="want_find_no_results_message">No results were found given your list and driving distance.  Please try again with different criteria.</string>    
+    <string name="want_ok">Ok</string>    
     
+    <string name="want_map_results">Mapped Results</string>
+    <string name="want_map_clear_map">Clear Map</string>
+    <string name="want_map_reset_map">Reset Map</string>
+    <string name="want_map_default_info_window">Default Info Window</string>
+    <string name="want_map_custom_info_window">Custom Info Window</string>
+    <string name="want_map_custom_info_contents">Custom Info Contents</string>
+    <string name="want_map_map_not_ready">Map not ready</string>
 </resources>
 

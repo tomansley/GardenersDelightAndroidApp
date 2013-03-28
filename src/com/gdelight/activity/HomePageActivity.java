@@ -17,6 +17,10 @@
 package com.gdelight.activity;
 
 import com.gdelight.R;
+import com.gdelight.domain.user.UserBean;
+import com.gdelight.utils.constants.Constants;
+import com.nullwire.trace.ExceptionHandler;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,9 +33,11 @@ import android.widget.Button;
  * activity. Inside of its window, it places a single view: an EditText that
  * displays and edits some internal text.
  */
-public class HomePageActivity extends Activity {
+public class HomePageActivity extends Activity implements OnClickListener {
     
-    public HomePageActivity() {
+	private UserBean user = null;
+
+	public HomePageActivity() {
     }
 
     /** Called with the activity is first created. */
@@ -39,9 +45,16 @@ public class HomePageActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //send trace back to base to be able to track issues
+        ExceptionHandler.register(this, "http://www.tomansley.com/gdelight/trace.php"); 
+        
+        //get the user
+        Bundle bundle = this.getIntent().getExtras();
+        user = (UserBean) bundle.getSerializable(Constants.USER_BEAN);
+
         // Inflate our UI from its XML layout description.
         setContentView(R.layout.home_page);
-        ((Button) findViewById(R.id.findButton)).setOnClickListener(mFindButtonListener);
+        ((Button) findViewById(R.id.homeWantButton)).setOnClickListener(this);
 
     }
 
@@ -53,12 +66,21 @@ public class HomePageActivity extends Activity {
         super.onResume();
     }
 
-    OnClickListener mFindButtonListener = new OnClickListener() {
-        public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.setClassName("com.gdelight", "com.gdelight.activity.MapActivity");
-            startActivity(intent);
-        }
-    };
+	@Override
+	public void onClick(View v) {
+		switch(v.getId()) {
+			case R.id.homeWantButton: {
+		        Intent intent = new Intent();
+		        intent.setClassName("com.gdelight", "com.gdelight.activity.WantHomeActivity");
+				Bundle b = new Bundle();
+				b.putSerializable(Constants.USER_BEAN, user);
+				intent.putExtras(b);
+		        startActivity(intent);
+				break;
+			}
+			default:
+				throw new RuntimeException("Unknown button ID");
+		}	
+	}
 
 }

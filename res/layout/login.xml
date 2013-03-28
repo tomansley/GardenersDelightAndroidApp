@@ -5,10 +5,10 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/what_do_you_want_to_do"
+        android:id="@+id/homeSecondQuestionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/username"
+        android:text="@string/login_username"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
@@ -24,7 +24,7 @@
         android:id="@+id/password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/password"
+        android:text="@string/login_password"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
@@ -35,9 +35,9 @@
         android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/signupButton"
+        android:id="@+id/loginLoginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login" />
+        android:text="@string/login_login" />
 
 </LinearLayout>

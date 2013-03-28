@@ -9,5 +9,6 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="lib" path="libs/gdelight-domain-objects.jar"/>
 	<classpathentry kind="lib" path="libs/gson-2.2.2.jar"/>
+	<classpathentry kind="lib" path="libs/trace.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
