@@ -1,8 +1,9 @@
 package com.gdelight.utils.location;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Context;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -14,15 +15,17 @@ public class LocationHelper {
 		/* Use the LocationManager class to obtain GPS locations */
 		LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
 
-		String mlocProvider;
-		Criteria hdCrit = new Criteria();
-		hdCrit.setAccuracy(Criteria.ACCURACY_COARSE);
-		mlocProvider = locationManager.getBestProvider(hdCrit, true);
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 1000, listener);
-		Location location = locationManager.getLastKnownLocation(mlocProvider);
-		locationManager.removeUpdates(listener);
+		//get providers
+        List<String> providers = locationManager.getProviders(true);
 
-		return location;
+		Location location = null;
+        /* Loop over the array backwards, and if you get an accurate location, then break out the loop*/        
+        for (int i=providers.size()-1; i>=0; i--) {
+                location = locationManager.getLastKnownLocation(providers.get(i));
+                if (location != null) break;
+        }
+
+        return location;
 
 	}
 	

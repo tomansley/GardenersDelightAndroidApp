@@ -6,6 +6,7 @@ import android.util.Log;
 import com.gdelight.domain.base.BaseRequestBean;
 import com.gdelight.domain.base.BaseResponseBean;
 import com.gdelight.domain.response.FindAvailableResponseBean;
+import com.gdelight.domain.response.HaveAvailableResponseBean;
 import com.gdelight.domain.response.LoginResponseBean;
 import com.gdelight.domain.response.SignupResponseBean;
 import com.gdelight.utils.json.JsonRequest;
@@ -38,6 +39,8 @@ public class RequestHelper {
 			response = (SignupResponseBean) JsonUtils.parseJSonDocument(responseStr, SignupResponseBean.class);
 		} else if (responseStr.contains("\"transactionType\":\"FIND_AVAILABLE\"")) {
 			response = (FindAvailableResponseBean) JsonUtils.parseJSonDocument(responseStr, FindAvailableResponseBean.class);
+		} else if (responseStr.contains("\"transactionType\":\"HAVE_AVAILABLE\"")) {
+			response = (HaveAvailableResponseBean) JsonUtils.parseJSonDocument(responseStr, HaveAvailableResponseBean.class);
 		} else if (responseStr.equals("")) {
 			
 		}

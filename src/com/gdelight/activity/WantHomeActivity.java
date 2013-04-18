@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gdelight.R;
-import com.gdelight.domain.item.AvailableItem;
 import com.gdelight.domain.item.Item;
+import com.gdelight.domain.item.ItemGroup;
 import com.gdelight.domain.request.FindAvailableRequestBean;
 import com.gdelight.domain.response.FindAvailableResponseBean;
 import com.gdelight.domain.user.UserBean;
@@ -123,7 +123,7 @@ public class WantHomeActivity extends Activity implements OnSeekBarChangeListene
         
         //------------------------
         //handle search button click
-        searchButton = (Button) findViewById(R.id.wantSearchButton);
+        searchButton = (Button) findViewById(R.id.wantSubmitButton);
         searchButton.setOnClickListener(this);
 
     }
@@ -183,65 +183,74 @@ public class WantHomeActivity extends Activity implements OnSeekBarChangeListene
 		switch(v.getId()) {
 			case R.id.wantAutoCompleteAddButton: {
 	            if (!adapterValues.contains(autoComplete.getText().toString())) {
-	            	adapter.add(autoComplete.getText().toString());
+	            	adapter.add(autoComplete.getText().toString().trim());
 	            	autoComplete.setText("");
 	            } else {
 	            	Toast.makeText(getApplicationContext(), R.string.want_already_in_shopping_list, Toast.LENGTH_LONG).show();
 	            }
 				break;
 			}
-			case R.id.wantSearchButton: {
+			case R.id.wantSubmitButton: {
 
-            	adapter.add(autoComplete.getText().toString());
+				if (adapter.getCount() == 0) {
+					adapter.add(autoComplete.getText().toString());
+				}
 
 				//get the current location
 				Location location = LocationHelper.getCurrentLocation(this, this);
-				double currentLatitude = location.getLatitude();
-				double currentLongitude = location.getLongitude();
-
-				//get the items to search on
-				List<Item> items = new ArrayList<Item>();
-				for (int i = 0; i < adapter.getCount(); i++) {
-					Item item = new Item();
-					item.setName(adapter.getItem(i));
-					items.add(item);
-				}
 				
-				//create the request
-				FindAvailableRequestBean request = new FindAvailableRequestBean();
-				request.setLatitude(currentLatitude);
-				request.setLongitude(currentLongitude);
-				request.setUserId(user.getEmail());
-				request.setToken(user.getToken());
-				request.setRadius(seekBar.getProgress());
-				request.setFindItems(items);
-				
-				FindAvailableResponseBean responseBean = (FindAvailableResponseBean) RequestHelper.makeRequest(WantHomeActivity.this, request);
-				
-				List<AvailableItem> availableItems = responseBean.getItems();
-				
-				if (availableItems.size() > 0) {
-				
-	            	autoComplete.setText("");
-
-	            	Intent intent = new Intent();
-					intent.setClassName("com.gdelight", "com.gdelight.activity.WantMapActivity");
+				if (location != null) {
+									
+					double currentLatitude = location.getLatitude();
+					double currentLongitude = location.getLongitude();
 	
-					Bundle b = new Bundle();
-					b.putSerializable(Constants.USER_BEAN, responseBean.getUser());
-					b.putSerializable(Constants.FIND_ITEMS, (Serializable) availableItems);
-	
-					intent.putExtras(b);
-					startActivity(intent);
+					//get the items to search on
+					List<Item> items = new ArrayList<Item>();
+					for (int i = 0; i < adapter.getCount(); i++) {
+						Item item = new Item();
+						item.setName(adapter.getItem(i));
+						items.add(item);
+					}
 					
+					//create the request
+					FindAvailableRequestBean request = new FindAvailableRequestBean();
+					request.setLatitude(currentLatitude);
+					request.setLongitude(currentLongitude);
+					request.setUserId(user.getEmail());
+					request.setToken(user.getToken());
+					request.setRadius(seekBar.getProgress());
+					request.setFindItems(items);
+					
+					FindAvailableResponseBean responseBean = (FindAvailableResponseBean) RequestHelper.makeRequest(WantHomeActivity.this, request);
+					
+					List<ItemGroup> availableItems = responseBean.getItems();
+					
+					if (availableItems.size() > 0) {
+					
+		            	autoComplete.setText("");
+	
+		            	Intent intent = new Intent();
+						intent.setClassName("com.gdelight", "com.gdelight.activity.WantMapActivity");
+		
+						Bundle b = new Bundle();
+						b.putSerializable(Constants.USER_BEAN, responseBean.getUser());
+						b.putSerializable(Constants.FIND_ITEMS, (Serializable) availableItems);
+		
+						intent.putExtras(b);
+						startActivity(intent);
+						
+					} else {
+						
+						new AlertDialog.Builder(this)
+					    .setTitle(R.string.want_find_no_results)
+					    .setMessage(R.string.want_find_no_results_message)
+					    .setPositiveButton(R.string.want_ok, this)
+					    .create().show();
+	
+					}
+				
 				} else {
-					
-					new AlertDialog.Builder(this)
-				    .setTitle(R.string.want_find_no_results)
-				    .setMessage(R.string.want_find_no_results_message)
-				    .setPositiveButton(R.string.want_ok, this)
-				    .create().show();
-
+					Toast.makeText(getApplicationContext(), R.string.want_no_gps_coordinates, Toast.LENGTH_LONG).show();
 				}
 
 				break;

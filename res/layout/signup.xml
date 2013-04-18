@@ -5,52 +5,65 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/homeSecondQuestionTextView"
+        android:id="@+id/signupFirstNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/signup_username"
+        android:text="@string/signup_firstname"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
-        android:id="@+id/loginUsername"
+        android:id="@+id/signupFirstNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textEmailAddress" >
-
+        android:inputType="textNoSuggestions">
         <requestFocus />
     </EditText>
+        
+    <TextView
+        android:id="@+id/signupEmailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/signup_email"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/signupEmailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textEmailAddress" />
 
     <TextView
-        android:id="@+id/password"
+        android:id="@+id/signupPasswordTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/signup_password"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
-        android:id="@+id/loginPassword"
+        android:id="@+id/signupPasswordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPassword" />
 
     <TextView
-        android:id="@+id/Password2Label"
+        android:id="@+id/signupPassword2TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/signup_password2"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
-        android:id="@+id/loginPassword2"
+        android:id="@+id/signupPassword2EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/loginLoginButton"
+        android:id="@+id/signupSignupButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/signup_signup" />

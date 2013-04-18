@@ -55,6 +55,7 @@ public class HomePageActivity extends Activity implements OnClickListener {
         // Inflate our UI from its XML layout description.
         setContentView(R.layout.home_page);
         ((Button) findViewById(R.id.homeWantButton)).setOnClickListener(this);
+        ((Button) findViewById(R.id.homeHaveButton)).setOnClickListener(this);
 
     }
 
@@ -72,6 +73,15 @@ public class HomePageActivity extends Activity implements OnClickListener {
 			case R.id.homeWantButton: {
 		        Intent intent = new Intent();
 		        intent.setClassName("com.gdelight", "com.gdelight.activity.WantHomeActivity");
+				Bundle b = new Bundle();
+				b.putSerializable(Constants.USER_BEAN, user);
+				intent.putExtras(b);
+		        startActivity(intent);
+				break;
+			}
+			case R.id.homeHaveButton: {
+		        Intent intent = new Intent();
+		        intent.setClassName("com.gdelight", "com.gdelight.activity.HaveHomeActivity");
 				Bundle b = new Bundle();
 				b.putSerializable(Constants.USER_BEAN, user);
 				intent.putExtras(b);

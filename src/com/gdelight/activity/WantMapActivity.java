@@ -16,10 +16,12 @@
 
 package com.gdelight.activity;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.gdelight.R;
-import com.gdelight.domain.item.AvailableItem;
+import com.gdelight.domain.item.ItemGroup;
 import com.gdelight.domain.user.UserBean;
 import com.gdelight.utils.constants.Constants;
 import com.gdelight.widget.adapter.MapWindowAdapter;
@@ -52,7 +54,8 @@ public class WantMapActivity extends FragmentActivity implements OnMarkerClickLi
 
 	private GoogleMap mMap;
 	private UserBean user = null;
-	private List<AvailableItem> items = null;
+	private List<ItemGroup> groups = null;
+	private Map<Marker, ItemGroup> mappedItems = new HashMap<Marker, ItemGroup>();
 
 	public WantMapActivity() {
 	}
@@ -68,7 +71,7 @@ public class WantMapActivity extends FragmentActivity implements OnMarkerClickLi
 		//get the user
 		Bundle bundle = this.getIntent().getExtras();
 		user = (UserBean) bundle.getSerializable(Constants.USER_BEAN);
-		items = (List<AvailableItem>) bundle.getSerializable(Constants.FIND_ITEMS);
+		groups = (List<ItemGroup>) bundle.getSerializable(Constants.FIND_ITEMS);
 
 		setContentView(R.layout.map);
 
@@ -100,7 +103,7 @@ public class WantMapActivity extends FragmentActivity implements OnMarkerClickLi
 		// show the zoom controls.
 		mMap.getUiSettings().setZoomControlsEnabled(true);
 
-		// Add lots of markers to the map.
+		// Add markers to the map.
 		addMarkersToMap();
 
 		// Set listeners for marker events.
@@ -109,7 +112,7 @@ public class WantMapActivity extends FragmentActivity implements OnMarkerClickLi
 		//set listener for info window events (info window = box opened when marker clicked.)
 		mMap.setOnInfoWindowClickListener(this);
 		
-		MapWindowAdapter mapInfoAdapter = new MapWindowAdapter();
+		MapWindowAdapter mapInfoAdapter = new MapWindowAdapter(this, mappedItems);
 		
 		mMap.setInfoWindowAdapter(mapInfoAdapter);
 
@@ -122,8 +125,8 @@ public class WantMapActivity extends FragmentActivity implements OnMarkerClickLi
 				@Override
 				public void onGlobalLayout() {
 					Builder b = LatLngBounds.builder();
-					for (AvailableItem item: items) {
-						b.include(new LatLng(item.getLatitude(), item.getLongitude()));
+					for (ItemGroup group: groups) {
+						b.include(new LatLng(group.getLatitude(), group.getLongitude()));
 					}
 					LatLngBounds bounds = b.build();
 					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
@@ -138,11 +141,19 @@ public class WantMapActivity extends FragmentActivity implements OnMarkerClickLi
 	}
 
 	private void addMarkersToMap() {
-		for (AvailableItem item: items) {
-			mMap.addMarker(new MarkerOptions()
-			.position(new LatLng(item.getLatitude(), item.getLongitude()))
-			.title(item.getName())
-			.snippet("This is a test to see how much information we can reasonably put into the marker without it breaking."));
+		
+		MarkerOptions markerOptions = null;
+		Marker marker = null;
+		for (ItemGroup group: groups) {
+			
+			markerOptions = new MarkerOptions();
+			markerOptions.position(new LatLng(group.getLatitude(), group.getLongitude()));
+			markerOptions.draggable(false);
+
+			marker = mMap.addMarker(markerOptions);
+
+			mappedItems.put(marker, group);
+			
 		}
 	}
 

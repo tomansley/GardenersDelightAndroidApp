@@ -20,6 +20,7 @@ import com.gdelight.R;
 import com.gdelight.domain.base.BaseResponseBean.STATUS_TYPE;
 import com.gdelight.domain.request.SignupRequestBean;
 import com.gdelight.domain.response.SignupResponseBean;
+import com.gdelight.domain.user.UserBean;
 import com.gdelight.request.RequestHelper;
 import com.gdelight.utils.constants.Constants;
 import com.gdelight.utils.string.StringHelper;
@@ -46,7 +47,10 @@ public class SignupActivity extends Activity implements OnClickListener, DialogI
 	private EditText username = null;
 	private EditText password = null;
 	private EditText password2 = null;
+	private EditText firstName = null;
 	private AlertDialog alertDialog = null;
+	private SignupResponseBean responseBean = null;
+	private UserBean user = null;
 
 	public SignupActivity() {
 	}
@@ -62,14 +66,15 @@ public class SignupActivity extends Activity implements OnClickListener, DialogI
         // Inflate our UI from its XML layout description.
 		setContentView(R.layout.signup);
 
-		((Button) findViewById(R.id.loginLoginButton)).setOnClickListener(this);
-		username = (EditText) findViewById(R.id.loginUsername);
-		password = (EditText) findViewById(R.id.loginPassword);
-		password2 = (EditText) findViewById(R.id.loginPassword2);
+		((Button) findViewById(R.id.signupSignupButton)).setOnClickListener(this);
+		username = (EditText) findViewById(R.id.signupEmailEditText);
+		password = (EditText) findViewById(R.id.signupPasswordEditText);
+		password2 = (EditText) findViewById(R.id.signupPassword2EditText);
+		firstName = (EditText) findViewById(R.id.signupFirstNameEditText);
 
 		alertDialog = new AlertDialog.Builder(this)
 	    .setTitle(R.string.signup_error)
-	    .setMessage(R.string.signup_username_exists)
+	    .setMessage(R.string.signup_email_exists)
 	    .setNegativeButton(R.string.signup_login, this)
 	    .setPositiveButton(R.string.signup_resend_password, this)
 	    .create();
@@ -87,22 +92,29 @@ public class SignupActivity extends Activity implements OnClickListener, DialogI
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()) {
-			case R.id.loginLoginButton: {
+			case R.id.signupSignupButton: {
 				
 				//1.  Check passwords are the same.
 				//2.  Try create user.
 				//3.  Start intent if successful
 	
 				if (!password.getText().toString().equals(password2.getText().toString())) {
-					Toast.makeText(getApplicationContext(), "Passwords do not match", Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), R.string.signup_error_password_mismatch, Toast.LENGTH_LONG).show();
+				} else if (firstName.getText().toString().length() == 0) {
+					Toast.makeText(getApplicationContext(), R.string.signup_error_no_firstname, Toast.LENGTH_LONG).show();
+				} else if (username.getText().toString().length() == 0) {
+					Toast.makeText(getApplicationContext(), R.string.signup_error_no_valid_email, Toast.LENGTH_LONG).show();
 				} else {
 	
 					//get the appropriate request bean and populate.
 					SignupRequestBean requestBean = new SignupRequestBean();
 					requestBean.setUserId(username.getText().toString());
 					requestBean.setToken(StringHelper.encryptPassword(password.getText().toString()));
+					requestBean.setFirstName(firstName.getText().toString());
 	
-					SignupResponseBean responseBean = (SignupResponseBean) RequestHelper.makeRequest(SignupActivity.this, requestBean);
+					responseBean = (SignupResponseBean) RequestHelper.makeRequest(SignupActivity.this, requestBean);
+					
+					user = responseBean.getUser();
 					
 					//if error
 					if (responseBean.getStatus().equals(STATUS_TYPE.FAILED)) {
@@ -110,40 +122,47 @@ public class SignupActivity extends Activity implements OnClickListener, DialogI
 					
 					//else go to home page for new user.
 					} else {
-						Intent intent = new Intent();
-						intent.setClassName("com.gdelight", "com.gdelight.activity.HomePageActivity");
-						Bundle b = new Bundle();
-						b.putSerializable(Constants.USER_BEAN, responseBean.getUser());
-
-						intent.putExtras(b);
-						startActivity(intent);
+						
+						new AlertDialog.Builder(this)
+					    .setTitle(R.string.signup_success_title)
+					    .setMessage(R.string.signup_success_message)
+					    .setNeutralButton(R.string.signup_ok, this)
+					    .create().show();
+						
 					}
 				}
 				break;
 			}
-			default:
-				throw new RuntimeException("Unknow button ID");
 		}
 	}
 
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
+		
 		switch(which) {
-		case DialogInterface.BUTTON_POSITIVE: {
-			Intent intent = new Intent();
-			intent.setClassName("com.gdelight", "com.gdelight.activity.HomePageActivity");
-			startActivity(intent);
-			break;
+			case DialogInterface.BUTTON_POSITIVE: {
+				Intent intent = new Intent();
+				intent.setClassName("com.gdelight", "com.gdelight.activity.HomePageActivity");
+				startActivity(intent);
+				break;
+			}
+			case DialogInterface.BUTTON_NEGATIVE: {
+				Intent intent = new Intent();
+				intent.setClassName("com.gdelight", "com.gdelight.activity.LoginActivity");
+				startActivity(intent);	
+				break;
+			}
+			case DialogInterface.BUTTON_NEUTRAL: {
+				Intent intent = new Intent();
+				intent.setClassName("com.gdelight", "com.gdelight.activity.HomePageActivity");
+				Bundle b = new Bundle();
+				b.putSerializable(Constants.USER_BEAN, user);
+
+				intent.putExtras(b);
+				startActivity(intent);
+				break;
+			}
 		}
-		case DialogInterface.BUTTON_NEGATIVE: {
-			Intent intent = new Intent();
-			intent.setClassName("com.gdelight", "com.gdelight.activity.LoginActivity");
-			startActivity(intent);	
-			break;
-		}
-		default:
-			throw new RuntimeException("Unknow button ID");
-	}
 	}
 
 }

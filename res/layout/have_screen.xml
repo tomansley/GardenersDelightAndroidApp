@@ -5,19 +5,20 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/wantHeader"
+        android:id="@+id/haveHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="20dp"
-        android:text="@string/want_header"
+        android:text="@string/have_header"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <AutoCompleteTextView
-        android:id="@+id/wantAutoCompleteText"
+        android:id="@+id/haveAutoCompleteText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:paddingBottom="20dp" >
+        android:paddingBottom="20dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" >
 
         <requestFocus />
     </AutoCompleteTextView>
@@ -25,50 +26,44 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
         android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/wantAmountTextView"
+            android:id="@+id/haveAmountTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.09"
-            android:text="@string/want_driving_distance"
+            android:text="@string/have_amount"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TextView
-            android:id="@+id/wantDrivingDistanceValueTextView"
-            android:layout_width="wrap_content"
+        <Spinner
+            android:id="@+id/haveAmountSpinner"
+            android:layout_width="135dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-        	android:layout_alignParentRight="true"
-        	android:gravity="right"
-            android:layout_weight="0.01"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:layout_weight="0.26"
+            android:entries="@array/item_amount_array" />
 
     </LinearLayout>
-
-    <SeekBar
-        android:id="@+id/wantDrivingDistanceSeekBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/wantAutoCompleteAddButton"
+            android:id="@+id/haveAutoCompleteAddButton"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="@string/want_add_to_list" />
+            android:text="@string/have_add_to_list" />
 
         <Button
-            android:id="@+id/wantSubmitButton"
+            android:id="@+id/haveSubmitButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="@string/want_search" />
+            android:text="@string/have_submit" />
 
     </LinearLayout>
 
@@ -78,15 +73,15 @@
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/wantWantListTextView"
+            android:id="@+id/haveHaveListTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="@string/want_want_list"
+            android:text="@string/have_have_list"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <ListView
-            android:id="@+id/wantListView"
+            android:id="@+id/haveListView"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_marginBottom="40dp" >

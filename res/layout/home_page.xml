@@ -19,7 +19,7 @@
         android:paddingTop="20dp" >
 
         <Button
-            android:id="@+id/homeFindButton"
+            android:id="@+id/homeHaveButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.42"
@@ -28,7 +28,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/homeSecondQuestionTextView"
+        android:id="@+id/loginEmailTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/home_do_you_want"

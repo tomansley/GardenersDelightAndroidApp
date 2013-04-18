@@ -26,7 +26,8 @@
 		<activity android:name="com.gdelight.activity.WantMapActivity" android:label="@string/want_map_results"></activity>
 		<activity android:name="com.gdelight.activity.SignupActivity" android:label="@string/signup_signup"></activity>
 		<activity android:name="com.gdelight.activity.WantHomeActivity" android:label="@string/want_home"></activity>
-								
+		<activity android:name="com.gdelight.activity.HaveHomeActivity" android:label="@string/have_home"></activity>
+										
     </application>
 
 </manifest>

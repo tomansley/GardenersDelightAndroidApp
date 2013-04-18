@@ -20,7 +20,6 @@ import com.gdelight.R;
 import com.nullwire.trace.ExceptionHandler;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,7 +36,6 @@ public class ForgotLoginActivity extends Activity implements OnClickListener {
     
 	EditText username = null;
 	EditText password = null;
-	EditText password2 = null;
 	
     public ForgotLoginActivity() {
     	
@@ -52,12 +50,11 @@ public class ForgotLoginActivity extends Activity implements OnClickListener {
         ExceptionHandler.register(this, "http://www.tomansley.com/gdelight/trace.php"); 
 
         // Inflate our UI from its XML layout description.
-        setContentView(R.layout.login);
+        setContentView(R.layout.forgot_login);
 
-        ((Button) findViewById(R.id.loginLoginButton)).setOnClickListener(this);
+        ((Button) findViewById(R.id.forgotLoginSendPasswordButton)).setOnClickListener(this);
         username = (EditText) findViewById(R.id.loginUsername);
         password = (EditText) findViewById(R.id.loginPassword);
-        password2 = (EditText) findViewById(R.id.loginPassword2);
 
     }
 

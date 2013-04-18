@@ -29,18 +29,25 @@
 	<string name="first_screen_privacy">About your privacy</string>
 	
     <string name="signup_password2">Password Again</string>
-    <string name="signup_username">Username</string>
+    <string name="signup_email">Email</string>
     <string name="signup_password">Password</string>
     <string name="signup_login">Login</string>
 	<string name="signup_signup">Signup</string>
 	<string name="signup_resend_password">Send Password</string>
-	<string name="signup_username_exists">The username already exists</string>
+	<string name="signup_email_exists">A profile with that email already exists</string>
     <string name="signup_error">Signup Error</string>
-	
+    <string name="signup_firstname">First Name</string>
+    <string name="signup_error_password_mismatch">Passwords do not match</string>
+    <string name="signup_error_no_firstname">Please enter a first name</string>
+    <string name="signup_error_no_valid_email">Please enter a valid email</string>
+    <string name="signup_success_title">Signup Successful</string>
+    <string name="signup_success_message">Congratulations.  You are now signed up to Gardeners Delight.</string>
+    <string name="signup_ok">OK</string>
+    	
     <string name="login_login">Login</string>
     <string name="login_error_please_enter_values">Please enter username and password</string>
     <string name="login_error_invalid_credentials">Invalid login.  Please try again.</string>
-    <string name="login_username">Username</string>
+    <string name="login_email">Email</string>
     <string name="login_password">Password</string>
 
     <string name="forgot_login_signin_button">FORGOT LOGIN SIGNIN BUTTON PRESSED</string>
@@ -52,7 +59,15 @@
     <string name="home_do_you_have">Do you have something available?</string>
     <string name="home_do_you_want">or do you want something?</string>
     <string name="home_page">Home Page</string>
+    
     <string name="have">Have</string>
+    <string name="have_home">Have Home</string>
+    <string name="have_header">What do you have?</string>
+    <string name="have_submit">Submit</string>
+    <string name="have_amount">How much do you have?</string>
+    <string name="have_add_to_list">Add to list</string>
+    <string name="have_have_list">Have List</string>
+    <string name="have_already_in_have_list">Item already in list</string>
     
     <string name="want">Want</string>
     <string name="want_home">Want Home</string>
@@ -67,7 +82,8 @@
     <string name="want_search_button">THIS IS WHERE WE WOULD SEARCH</string>
     <string name="want_find_no_results">Nothing found</string>
     <string name="want_find_no_results_message">No results were found given your list and driving distance.  Please try again with different criteria.</string>    
-    <string name="want_ok">Ok</string>    
+    <string name="want_ok">OK</string>    
+    <string name="want_no_gps_coordinates">Cannot determine location.  Please check that GPS is turned on.</string>
     
     <string name="want_map_results">Mapped Results</string>
     <string name="want_map_clear_map">Clear Map</string>
@@ -76,5 +92,11 @@
     <string name="want_map_custom_info_window">Custom Info Window</string>
     <string name="want_map_custom_info_contents">Custom Info Contents</string>
     <string name="want_map_map_not_ready">Map not ready</string>
+    
+    <string-array name="item_amount_array">
+        <item>A little</item>
+        <item>Some</item>
+        <item>Lots</item>
+    </string-array>
 </resources>
 
