@@ -57,7 +57,7 @@
 	<string name="forgot_login_username_exists">The username already exists</string>
 	
     <string name="home_do_you_have">Do you have something available?</string>
-    <string name="home_do_you_want">or do you want something?</string>
+    <string name="home_do_you_want">or are you looking for something?</string>
     <string name="home_page">Home Page</string>
     
     <string name="have">Have</string>
@@ -68,14 +68,15 @@
     <string name="have_add_to_list">Add to list</string>
     <string name="have_have_list">Have List</string>
     <string name="have_already_in_have_list">Item already in list</string>
+    <string name="have_success">Items added successfully</string>
     
-    <string name="want">Want</string>
+    <string name="want">Need</string>
     <string name="want_home">Want Home</string>
     <string name="want_header">What are you looking for?</string>
     <string name="want_or">Or browse by category</string>
     <string name="want_just_start_typing">Just start typing</string>
     <string name="want_driving_distance">Driving distance</string>
-    <string name="want_want_list">Want List</string>
+    <string name="want_want_list">Shopping List</string>
     <string name="want_add_to_list">Add to list</string>
     <string name="want_search">Search</string>
     <string name="want_already_in_shopping_list">Item already in shopping list</string>
@@ -85,6 +86,12 @@
     <string name="want_ok">OK</string>    
     <string name="want_no_gps_coordinates">Cannot determine location.  Please check that GPS is turned on.</string>
     
+    <string name="want_location_view">Want Location View</string>
+    <string name="want_location_view_have_list">Items Available</string>
+    <string name="want_location_view_phone">Phone</string>
+    <string name="want_location_view_email">Email</string>
+    <string name="want_location_view_distance">Distance From Current Location</string>
+            
     <string name="want_map_results">Mapped Results</string>
     <string name="want_map_clear_map">Clear Map</string>
     <string name="want_map_reset_map">Reset Map</string>

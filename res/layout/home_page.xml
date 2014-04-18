@@ -28,7 +28,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/loginEmailTextView"
+        android:id="@+id/homeSecondQuestionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/home_do_you_want"
@@ -47,6 +47,28 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.42"
             android:text="@string/want" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.42"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/homeHaveListTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:text="@string/have_have_list"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ListView
+            android:id="@+id/homeHaveListView"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="40dp" >
+        </ListView>
     </LinearLayout>
 
 </LinearLayout>

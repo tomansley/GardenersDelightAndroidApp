@@ -34,9 +34,6 @@ import android.widget.Toast;
  */
 public class ForgotLoginActivity extends Activity implements OnClickListener {
     
-	EditText username = null;
-	EditText password = null;
-	
     public ForgotLoginActivity() {
     	
     }
@@ -53,8 +50,6 @@ public class ForgotLoginActivity extends Activity implements OnClickListener {
         setContentView(R.layout.forgot_login);
 
         ((Button) findViewById(R.id.forgotLoginSendPasswordButton)).setOnClickListener(this);
-        username = (EditText) findViewById(R.id.loginUsername);
-        password = (EditText) findViewById(R.id.loginPassword);
 
     }
 

@@ -26,7 +26,6 @@ import com.gdelight.utils.constants.Constants;
 import com.gdelight.utils.string.StringHelper;
 import com.nullwire.trace.ExceptionHandler;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -42,15 +41,15 @@ import android.widget.Toast;
  * activity. Inside of its window, it places a single view: an EditText that
  * displays and edits some internal text.
  */
-public class SignupActivity extends Activity implements OnClickListener, DialogInterface.OnClickListener {
+public class SignupActivity extends AbstractGDelightActivity implements OnClickListener, DialogInterface.OnClickListener {
 
 	private EditText username = null;
 	private EditText password = null;
 	private EditText password2 = null;
 	private EditText firstName = null;
 	private AlertDialog alertDialog = null;
-	private SignupResponseBean responseBean = null;
 	private UserBean user = null;
+	private RequestHelper requestHelper = null;
 
 	public SignupActivity() {
 	}
@@ -112,24 +111,8 @@ public class SignupActivity extends Activity implements OnClickListener, DialogI
 					requestBean.setToken(StringHelper.encryptPassword(password.getText().toString()));
 					requestBean.setFirstName(firstName.getText().toString());
 	
-					responseBean = (SignupResponseBean) RequestHelper.makeRequest(SignupActivity.this, requestBean);
-					
-					user = responseBean.getUser();
-					
-					//if error
-					if (responseBean.getStatus().equals(STATUS_TYPE.FAILED)) {
-						alertDialog.show();				
-					
-					//else go to home page for new user.
-					} else {
-						
-						new AlertDialog.Builder(this)
-					    .setTitle(R.string.signup_success_title)
-					    .setMessage(R.string.signup_success_message)
-					    .setNeutralButton(R.string.signup_ok, this)
-					    .create().show();
-						
-					}
+					requestHelper = new RequestHelper();
+					requestHelper.makeRequest(SignupActivity.this, requestBean);
 				}
 				break;
 			}
@@ -164,5 +147,29 @@ public class SignupActivity extends Activity implements OnClickListener, DialogI
 			}
 		}
 	}
+
+	@Override
+	public void handleServerRequest() {
+		
+		SignupResponseBean responseBean = (SignupResponseBean) requestHelper.getResponse();
+		
+		//if error
+		if (responseBean.getStatus().equals(STATUS_TYPE.FAILED)) {
+			alertDialog.show();				
+		
+		//else go to home page for new user.
+		} else {
+			
+			user = responseBean.getUser();
+			
+			new AlertDialog.Builder(this)
+		    .setTitle(R.string.signup_success_title)
+		    .setMessage(R.string.signup_success_message)
+		    .setNeutralButton(R.string.signup_ok, this)
+		    .create().show();
+			
+		}
+	}
+
 
 }

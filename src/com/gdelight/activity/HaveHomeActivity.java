@@ -27,13 +27,10 @@ import com.gdelight.domain.item.Item;
 import com.gdelight.domain.item.ItemGroup;
 import com.gdelight.domain.request.HaveAvailableRequestBean;
 import com.gdelight.domain.response.HaveAvailableResponseBean;
-import com.gdelight.domain.user.UserBean;
 import com.gdelight.request.RequestHelper;
 import com.gdelight.utils.constants.Constants;
 import com.gdelight.widget.adapter.WantAutoCompleteAdapter;
-import com.nullwire.trace.ExceptionHandler;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -51,17 +48,19 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class HaveHomeActivity extends Activity implements OnItemSelectedListener, OnItemLongClickListener, OnClickListener {
+public class HaveHomeActivity extends AbstractGDelightActivity implements OnItemSelectedListener, OnItemLongClickListener, OnClickListener {
     
 	private AutoCompleteTextView autoComplete = null;
 	private WantAutoCompleteAdapter autoCompleteAdapter = null;
 	private ArrayAdapter<String> amountSpinnerAdapter = null;
 	private ArrayAdapter<String> listViewAdapter = null;
-	private List<String> adapterValues = new ArrayList<String>();
+	private List<String> adapterDisplayValues = new ArrayList<String>();
+	private List<String> adapterItemValues = new ArrayList<String>();
+	private List<String> adapterAmountValues = new ArrayList<String>();
 	private Button addButton = null;
 	private Button searchButton = null;
 	private Spinner amountSpinner = null;
-	private UserBean user = null;
+	private RequestHelper requestHelper = null;
 
     public HaveHomeActivity() {
     	
@@ -71,13 +70,6 @@ public class HaveHomeActivity extends Activity implements OnItemSelectedListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //send trace back to base to be able to track issues
-        ExceptionHandler.register(this, "http://www.tomansley.com/gdelight/trace.php"); 
-
-        //get the user
-        Bundle bundle = this.getIntent().getExtras();
-        user = (UserBean) bundle.getSerializable(Constants.USER_BEAN);
         
         // Inflate our UI from its XML layout description.
         setContentView(R.layout.have_screen);
@@ -109,7 +101,7 @@ public class HaveHomeActivity extends Activity implements OnItemSelectedListener
         
         // First parameter - Context - Second parameter - Layout for the row
         // Third parameter - ID of the TextView to which the data is written - Fourth - the Array of data
-        listViewAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, adapterValues);
+        listViewAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, adapterDisplayValues);
 
         // Assign adapter to ListView
         listView.setAdapter(listViewAdapter);
@@ -144,6 +136,8 @@ public class HaveHomeActivity extends Activity implements OnItemSelectedListener
 	        public void onClick(DialogInterface dialog, int which) { 
 	            String item = listViewAdapter.getItem(arg2);
 	            listViewAdapter.remove(item);
+	            adapterItemValues.remove(which);
+	            adapterAmountValues.remove(which);
 	        }
 	     })
 	    .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -160,8 +154,12 @@ public class HaveHomeActivity extends Activity implements OnItemSelectedListener
 	public void onClick(View v) {
 		switch(v.getId()) {
 			case R.id.haveAutoCompleteAddButton: {
-	            if (!adapterValues.contains(autoComplete.getText().toString())) {
-	            	listViewAdapter.add(autoComplete.getText().toString().trim());
+	            if (!adapterItemValues.contains(autoComplete.getText().toString())) {
+	            	
+	            	adapterItemValues.add(autoComplete.getText().toString());
+	            	adapterAmountValues.add(amountSpinner.getSelectedItem().toString());
+	            	
+	            	listViewAdapter.add(autoComplete.getText().toString().trim() + " - " + amountSpinner.getSelectedItem().toString());
 	            	autoComplete.setText("");
 	            } else {
 	            	Toast.makeText(getApplicationContext(), R.string.have_already_in_have_list, Toast.LENGTH_LONG).show();
@@ -179,33 +177,23 @@ public class HaveHomeActivity extends Activity implements OnItemSelectedListener
 				//get the items to search on
 				ItemGroup group = new ItemGroup();
 				group.setLocation("Main Location");
-				group.setName(user.getFirstName() + "'s Have List - " + formatter.format(new Date()));
-				for (int i = 0; i < listViewAdapter.getCount(); i++) {
+				group.setName(getUser().getFirstName() + "'s Have List - " + formatter.format(new Date()));
+				for (int i = 0; i < adapterItemValues.size(); i++) {
 					Item item = new Item();
-					item.setName(listViewAdapter.getItem(i));
+					item.setName(adapterItemValues.get(i));
+					item.setAmount(adapterAmountValues.get(i));
 					group.addItem(item);
 				}
 				
 				//create the request
-				HaveAvailableRequestBean request = new HaveAvailableRequestBean();
-				request.setUserId(user.getEmail());
-				request.setToken(user.getToken());
-				request.setAvailable(group);
+				HaveAvailableRequestBean requestBean = new HaveAvailableRequestBean();
+				requestBean.setUserId(getUser().getEmail());
+				requestBean.setToken(getUser().getToken());
+				requestBean.setAvailable(group);
 				
-				HaveAvailableResponseBean responseBean = (HaveAvailableResponseBean) RequestHelper.makeRequest(HaveHomeActivity.this, request);
-				
-            	autoComplete.setText("");
+				requestHelper = new RequestHelper();
+				requestHelper.makeRequest(HaveHomeActivity.this, requestBean);
 
-            	Intent intent = new Intent();
-				intent.setClassName("com.gdelight", "com.gdelight.activity.HaveMapActivity");
-
-				Bundle b = new Bundle();
-				b.putSerializable(Constants.USER_BEAN, responseBean.getUser());
-				//b.putSerializable(Constants.FIND_ITEMS, (Serializable) availableItems);
-
-				intent.putExtras(b);
-				startActivity(intent);
-					
 				break;
 			}
 			default:
@@ -224,5 +212,26 @@ public class HaveHomeActivity extends Activity implements OnItemSelectedListener
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void handleServerRequest() {
+						
+		HaveAvailableResponseBean responseBean = (HaveAvailableResponseBean) requestHelper.getResponse();
+		
+    	autoComplete.setText("");
+
+    	Intent intent = new Intent();
+		intent.setClassName("com.gdelight", "com.gdelight.activity.HomePageActivity");
+
+		Bundle b = new Bundle();
+		b.putSerializable(Constants.USER_BEAN, responseBean.getUser());
+
+		intent.putExtras(b);
+		startActivity(intent);
+
+		Toast.makeText(getApplicationContext(), R.string.have_success, Toast.LENGTH_LONG).show();
+
+	}
+
 
 }

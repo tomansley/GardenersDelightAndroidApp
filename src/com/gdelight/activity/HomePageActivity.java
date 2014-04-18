@@ -16,26 +16,33 @@
 
 package com.gdelight.activity;
 
-import com.gdelight.R;
-import com.gdelight.domain.user.UserBean;
-import com.gdelight.utils.constants.Constants;
-import com.nullwire.trace.ExceptionHandler;
+import java.util.ArrayList;
+import java.util.List;
 
-import android.app.Activity;
+import com.gdelight.R;
+import com.gdelight.utils.constants.Constants;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 /**
  * This class provides a basic demonstration of how to write an Android
  * activity. Inside of its window, it places a single view: an EditText that
  * displays and edits some internal text.
  */
-public class HomePageActivity extends Activity implements OnClickListener {
-    
-	private UserBean user = null;
+public class HomePageActivity extends AbstractGDelightActivity implements OnClickListener, OnItemLongClickListener  {
+
+	private ArrayAdapter<String> adapter = null;
+	private List<String> adapterValues = new ArrayList<String>();
 
 	public HomePageActivity() {
     }
@@ -45,18 +52,31 @@ public class HomePageActivity extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //send trace back to base to be able to track issues
-        ExceptionHandler.register(this, "http://www.tomansley.com/gdelight/trace.php"); 
-        
-        //get the user
-        Bundle bundle = this.getIntent().getExtras();
-        user = (UserBean) bundle.getSerializable(Constants.USER_BEAN);
-
-        // Inflate our UI from its XML layout description.
+        //---------------------
+        // handle buttons
         setContentView(R.layout.home_page);
         ((Button) findViewById(R.id.homeWantButton)).setOnClickListener(this);
         ((Button) findViewById(R.id.homeHaveButton)).setOnClickListener(this);
 
+        
+        //*****************************************************
+        // THIS IS WHERE WE GET ALL THE HAVE LISTS FOR THE USER
+        // I THINK WE SHOULD HAVE THEM BEING PASSED DOWN ALREADY!
+        //********************************************************
+        
+        
+        //---------------------
+        //handle list view
+        ListView listView = (ListView) findViewById(R.id.homeHaveListView);
+        listView.setOnItemLongClickListener(this);
+        
+        // First parameter - Context - Second parameter - Layout for the row
+        // Third parameter - ID of the TextView to which the data is written - Fourth - the Array of data
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, adapterValues);
+
+        // Assign adapter to ListView
+        listView.setAdapter(adapter);
+        
     }
 
     /**
@@ -74,7 +94,7 @@ public class HomePageActivity extends Activity implements OnClickListener {
 		        Intent intent = new Intent();
 		        intent.setClassName("com.gdelight", "com.gdelight.activity.WantHomeActivity");
 				Bundle b = new Bundle();
-				b.putSerializable(Constants.USER_BEAN, user);
+				b.putSerializable(Constants.USER_BEAN, getUser());
 				intent.putExtras(b);
 		        startActivity(intent);
 				break;
@@ -83,7 +103,7 @@ public class HomePageActivity extends Activity implements OnClickListener {
 		        Intent intent = new Intent();
 		        intent.setClassName("com.gdelight", "com.gdelight.activity.HaveHomeActivity");
 				Bundle b = new Bundle();
-				b.putSerializable(Constants.USER_BEAN, user);
+				b.putSerializable(Constants.USER_BEAN, getUser());
 				intent.putExtras(b);
 		        startActivity(intent);
 				break;
@@ -92,5 +112,39 @@ public class HomePageActivity extends Activity implements OnClickListener {
 				throw new RuntimeException("Unknown button ID");
 		}	
 	}
+
+	@Override
+	public boolean onItemLongClick(AdapterView<?> arg0, View arg1, final int arg2, long arg3) {
+		
+		new AlertDialog.Builder(this)
+	    .setTitle("Delete entry")
+	    .setMessage("Delete item?")
+	    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            String item = adapter.getItem(arg2);
+	            adapter.remove(item);
+	            
+	            //************************************************
+	            //THIS IS WHERE WE DELETE A HAVE LIST
+	            //************************************************
+	            
+	        }
+	     })
+	    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // do nothing
+	        }
+	     })
+	     .show();
+		
+		return false;
+	}
+
+	@Override
+	public void handleServerRequest() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

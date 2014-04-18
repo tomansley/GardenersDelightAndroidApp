@@ -39,39 +39,40 @@ import android.widget.Toast;
  * activity. Inside of its window, it places a single view: an EditText that
  * displays and edits some internal text.
  */
-public class LoginActivity extends Activity implements OnClickListener {
-    
+public class LoginActivity extends AbstractGDelightActivity implements OnClickListener {
+
 	EditText username = null;
 	EditText password = null;
 	Activity activity = this;
-	
-    public LoginActivity() {
-    	
-    }
+	private RequestHelper requestHelper = null;
 
-    /** Called with the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	public LoginActivity() {
 
-        //send trace back to base to be able to track issues
-        ExceptionHandler.register(this, "http://www.tomansley.com/gdelight/trace.php"); 
+	}
 
-        // Inflate our UI from its XML layout description.
-        setContentView(R.layout.login);
+	/** Called with the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        ((Button) findViewById(R.id.loginLoginButton)).setOnClickListener(this);
-        username = (EditText) findViewById(R.id.loginUsername);
-        password = (EditText) findViewById(R.id.loginPassword);
-    }
+		//send trace back to base to be able to track issues
+		ExceptionHandler.register(this, "http://www.tomansley.com/gdelight/trace.php"); 
 
-    /**
-     * Called when the activity is about to start interacting with the user.
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
+		// Inflate our UI from its XML layout description.
+		setContentView(R.layout.login);
+
+		((Button) findViewById(R.id.loginLoginButton)).setOnClickListener(this);
+		username = (EditText) findViewById(R.id.loginEmailEditText);
+		password = (EditText) findViewById(R.id.loginPassword);
+	}
+
+	/**
+	 * Called when the activity is about to start interacting with the user.
+	 */
+	@Override
+	protected void onResume() {
+		super.onResume();
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -86,31 +87,39 @@ public class LoginActivity extends Activity implements OnClickListener {
 				requestBean.setUserId(username.getText().toString());
 				requestBean.setToken(StringHelper.encryptPassword(password.getText().toString()));
 
-				LoginResponseBean responseBean = (LoginResponseBean) RequestHelper.makeRequest(activity, requestBean);
-				
-				//if error
-				if (responseBean.getStatus().equals(STATUS_TYPE.FAILED)) {
-					Toast.makeText(getApplicationContext(), R.string.login_error_invalid_credentials, Toast.LENGTH_LONG).show();
-				
-				//else go to home page for new user.
-				} else {
+				requestHelper = new RequestHelper();
+				requestHelper.makeRequest(this, requestBean);
 
-					Intent intent = new Intent();
-					intent.setClassName("com.gdelight", "com.gdelight.activity.HomePageActivity");
-
-					Bundle b = new Bundle();
-					b.putSerializable(Constants.USER_BEAN, responseBean.getUser());
-
-					intent.putExtras(b);
-					startActivity(intent);
-				}
 			}
-        	
+
 			break;
 		}
 		default:
 			throw new RuntimeException("Unknown button ID");
+		}
 	}
+
+	@Override
+	public void handleServerRequest() {
+		
+		LoginResponseBean responseBean = (LoginResponseBean) requestHelper.getResponse();
+				
+		//if error
+		if (responseBean.getStatus().equals(STATUS_TYPE.FAILED)) {
+			Toast.makeText(getApplicationContext(), R.string.login_error_invalid_credentials, Toast.LENGTH_LONG).show();
+
+			//else go to home page for new user.
+		} else {
+
+			Intent intent = new Intent();
+			intent.setClassName("com.gdelight", "com.gdelight.activity.HomePageActivity");
+
+			Bundle b = new Bundle();
+			b.putSerializable(Constants.USER_BEAN, responseBean.getUser());
+
+			intent.putExtras(b);
+			startActivity(intent);
+		}
 	}
 
 

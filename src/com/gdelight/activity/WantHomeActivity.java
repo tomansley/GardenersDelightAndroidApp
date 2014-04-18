@@ -25,14 +25,11 @@ import com.gdelight.domain.item.Item;
 import com.gdelight.domain.item.ItemGroup;
 import com.gdelight.domain.request.FindAvailableRequestBean;
 import com.gdelight.domain.response.FindAvailableResponseBean;
-import com.gdelight.domain.user.UserBean;
 import com.gdelight.request.RequestHelper;
 import com.gdelight.utils.constants.Constants;
 import com.gdelight.utils.location.LocationHelper;
 import com.gdelight.widget.adapter.WantAutoCompleteAdapter;
-import com.nullwire.trace.ExceptionHandler;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -57,7 +54,7 @@ import android.widget.Toast;
  * activity. Inside of its window, it places a single view: an EditText that
  * displays and edits some internal text.
  */
-public class WantHomeActivity extends Activity implements OnSeekBarChangeListener, OnItemLongClickListener, OnClickListener, LocationListener, DialogInterface.OnClickListener {
+public class WantHomeActivity extends AbstractGDelightActivity implements OnSeekBarChangeListener, OnItemLongClickListener, OnClickListener, LocationListener, DialogInterface.OnClickListener {
     
 	private AutoCompleteTextView autoComplete = null;
 	private WantAutoCompleteAdapter autoCompleteAdapter = null;
@@ -67,7 +64,7 @@ public class WantHomeActivity extends Activity implements OnSeekBarChangeListene
 	private Button addButton = null;
 	private Button searchButton = null;
 	private SeekBar seekBar = null;
-	private UserBean user = null;
+	private RequestHelper requestHelper = null;
 
     public WantHomeActivity() {
     	
@@ -78,13 +75,6 @@ public class WantHomeActivity extends Activity implements OnSeekBarChangeListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //send trace back to base to be able to track issues
-        ExceptionHandler.register(this, "http://www.tomansley.com/gdelight/trace.php"); 
-
-        //get the user
-        Bundle bundle = this.getIntent().getExtras();
-        user = (UserBean) bundle.getSerializable(Constants.USER_BEAN);
-        
         // Inflate our UI from its XML layout description.
         setContentView(R.layout.want_screen);
         
@@ -213,41 +203,16 @@ public class WantHomeActivity extends Activity implements OnSeekBarChangeListene
 					}
 					
 					//create the request
-					FindAvailableRequestBean request = new FindAvailableRequestBean();
-					request.setLatitude(currentLatitude);
-					request.setLongitude(currentLongitude);
-					request.setUserId(user.getEmail());
-					request.setToken(user.getToken());
-					request.setRadius(seekBar.getProgress());
-					request.setFindItems(items);
+					FindAvailableRequestBean requestBean = new FindAvailableRequestBean();
+					requestBean.setLatitude(currentLatitude);
+					requestBean.setLongitude(currentLongitude);
+					requestBean.setUserId(getUser().getEmail());
+					requestBean.setToken(getUser().getToken());
+					requestBean.setRadius(seekBar.getProgress());
+					requestBean.setFindItems(items);
 					
-					FindAvailableResponseBean responseBean = (FindAvailableResponseBean) RequestHelper.makeRequest(WantHomeActivity.this, request);
-					
-					List<ItemGroup> availableItems = responseBean.getItems();
-					
-					if (availableItems.size() > 0) {
-					
-		            	autoComplete.setText("");
-	
-		            	Intent intent = new Intent();
-						intent.setClassName("com.gdelight", "com.gdelight.activity.WantMapActivity");
-		
-						Bundle b = new Bundle();
-						b.putSerializable(Constants.USER_BEAN, responseBean.getUser());
-						b.putSerializable(Constants.FIND_ITEMS, (Serializable) availableItems);
-		
-						intent.putExtras(b);
-						startActivity(intent);
-						
-					} else {
-						
-						new AlertDialog.Builder(this)
-					    .setTitle(R.string.want_find_no_results)
-					    .setMessage(R.string.want_find_no_results_message)
-					    .setPositiveButton(R.string.want_ok, this)
-					    .create().show();
-	
-					}
+					requestHelper = new RequestHelper();
+					requestHelper.makeRequest(WantHomeActivity.this, requestBean);
 				
 				} else {
 					Toast.makeText(getApplicationContext(), R.string.want_no_gps_coordinates, Toast.LENGTH_LONG).show();
@@ -288,6 +253,37 @@ public class WantHomeActivity extends Activity implements OnSeekBarChangeListene
 	public void onClick(DialogInterface dialog, int which) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void handleServerRequest() {
+		
+		FindAvailableResponseBean responseBean = (FindAvailableResponseBean) requestHelper.getResponse();
+		
+		List<ItemGroup> availableItems = responseBean.getItems();
+		
+		if (availableItems.size() > 0) {
+		
+        	autoComplete.setText("");
+
+        	Intent intent = new Intent();
+			intent.setClassName("com.gdelight", "com.gdelight.activity.WantMapActivity");
+
+			Bundle b = new Bundle();
+			b.putSerializable(Constants.USER_BEAN, responseBean.getUser());
+			b.putSerializable(Constants.FIND_ITEMS, (Serializable) availableItems);
+
+			intent.putExtras(b);
+			startActivity(intent);
+			
+		} else {
+			
+			new AlertDialog.Builder(this)
+		    .setTitle(R.string.want_find_no_results)
+		    .setMessage(R.string.want_find_no_results_message)
+		    .setPositiveButton(R.string.want_ok, this)
+		    .create().show();
+		}
 	}
 
 }

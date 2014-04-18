@@ -7,7 +7,8 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Scanner;
 
-import android.app.Activity;
+import com.gdelight.activity.AbstractGDelightActivity;
+
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -16,19 +17,23 @@ public class JsonRequest extends AsyncTask<String, Integer, String> {
 
 	private static String contentType = "text/xml; charset=ISO-8859-1";
 	private String response = "";
-	private Activity activity = null;
+	private AbstractGDelightActivity activity = null;
 	private ProgressDialog progressDialog;
 	
-	public JsonRequest(Activity activity) {
+	public JsonRequest(AbstractGDelightActivity activity) {
 		this.activity = activity;
 	}
 	
-	protected void onPreExecute()
-    {
-        progressDialog = ProgressDialog.show(activity, "", "Loading...");
-        progressDialog.show();
-    }
+	@Override
+	protected void onPreExecute() {
+		progressDialog = ProgressDialog.show(activity, "", "Working...");
+		progressDialog.setIndeterminate(true);
+		progressDialog.setCancelable(false);
+		progressDialog.show();
 
+		super.onPreExecute();
+	}
+	
 	protected String doInBackground(String... json) {
 
 		try {
@@ -52,6 +57,7 @@ public class JsonRequest extends AsyncTask<String, Integer, String> {
 			conn.setFixedLengthStreamingMode(param.getBytes().length);
 			conn.setRequestProperty("Content-Type", contentType);   
 			//send the POST out
+			conn.connect();
 			PrintWriter out = new PrintWriter(conn.getOutputStream());
 			out.print(param);
 			out.close();
@@ -79,16 +85,12 @@ public class JsonRequest extends AsyncTask<String, Integer, String> {
 		return response;
 	}
 
-	protected void onProgressUpdate(Integer... progress) {
-		if (progress.length > 0) {
-			progressDialog.setProgress(progress[0]);
-		}
-	}
-	
 	protected void onPostExecute(String result) {
-		if (progressDialog.isShowing()) {
+		if (progressDialog.isShowing())
 			progressDialog.dismiss();
-        }
+		activity.handleServerRequest();
+		
+		super.onPostExecute(response);
 	}
 
 }

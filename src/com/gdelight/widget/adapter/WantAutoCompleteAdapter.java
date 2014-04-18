@@ -31,7 +31,7 @@ public class WantAutoCompleteAdapter extends ArrayAdapter<String> implements Fil
 	@Override
 	public String getItem(int index) {
 		String item = "";
-		if (mData.size() != 0) {
+		if (mData.size() != 0 && mData.size() < index) {
 			item = mData.get(index);
 		}
 		return item;

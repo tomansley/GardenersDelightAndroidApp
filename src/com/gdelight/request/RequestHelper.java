@@ -1,8 +1,9 @@
 package com.gdelight.request;
 
-import android.app.Activity;
+import android.os.AsyncTask;
 import android.util.Log;
 
+import com.gdelight.activity.AbstractGDelightActivity;
 import com.gdelight.domain.base.BaseRequestBean;
 import com.gdelight.domain.base.BaseResponseBean;
 import com.gdelight.domain.response.FindAvailableResponseBean;
@@ -13,8 +14,14 @@ import com.gdelight.utils.json.JsonRequest;
 import com.gdelight.utils.json.JsonUtils;
 
 public class RequestHelper {
+	
+	BaseResponseBean response = null;
+	
+	public BaseResponseBean getResponse() {
+		return response;
+	}
 
-	public static BaseResponseBean makeRequest(Activity activity, BaseRequestBean request) {
+	public void makeRequest(AbstractGDelightActivity activity, BaseRequestBean request) {
 		Log.d("RequestHelper.makeRequest", "Starting method");
 		
 		//get the Json from the request bean
@@ -31,8 +38,6 @@ public class RequestHelper {
 			e.printStackTrace();
 		}
 		
-		BaseResponseBean response = null;
-		
 		if (responseStr.contains("\"transactionType\":\"LOGIN\"")) {
 			response = (LoginResponseBean) JsonUtils.parseJSonDocument(responseStr, LoginResponseBean.class);
 		} else if (responseStr.contains("\"transactionType\":\"SIGNUP\"")) {
@@ -46,7 +51,6 @@ public class RequestHelper {
 		}
 
 		Log.d("RequestHelper.makeRequest", "Ending method");
-		return response;
 	}
 	
 }

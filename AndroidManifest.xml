@@ -11,7 +11,7 @@
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 	<uses-feature android:glEsVersion="0x00020000" android:required="true"/>
 	
-    <application android:label="@string/gardeners_delight_app" android:allowBackup="true">
+    <application android:label="@string/gardeners_delight_app" android:allowBackup="true" android:icon="@drawable/gdelight_512x512">
 
         <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyBJcDyD9OgHv9y-kbjK5nNFrS-qAk157xc"/>
         
@@ -21,10 +21,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-		<activity android:name="com.gdelight.activity.LoginActivity" android:label="@string/login_login"></activity>
+		<activity android:name="com.gdelight.activity.LoginActivity" android:label="@string/login_login" android:noHistory="true"></activity>
 		<activity android:name="com.gdelight.activity.HomePageActivity" android:label="@string/home_page"></activity>
 		<activity android:name="com.gdelight.activity.WantMapActivity" android:label="@string/want_map_results"></activity>
-		<activity android:name="com.gdelight.activity.SignupActivity" android:label="@string/signup_signup"></activity>
+		<activity android:name="com.gdelight.activity.SignupActivity" android:label="@string/signup_signup" android:noHistory="true"></activity>
 		<activity android:name="com.gdelight.activity.WantHomeActivity" android:label="@string/want_home"></activity>
 		<activity android:name="com.gdelight.activity.HaveHomeActivity" android:label="@string/have_home"></activity>
 										
